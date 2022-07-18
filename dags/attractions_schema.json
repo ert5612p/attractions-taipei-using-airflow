@@ -1,0 +1,242 @@
+[
+    {
+      "mode": "NULLABLE",
+      "name": "id",
+      "type": "INTEGER"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "name",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "name_zh",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "open_status",
+      "type": "INTEGER"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "introduction",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "open_time",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "zipcode",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "distric",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "address",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "tel",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "fax",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "email",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "months",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "nlat",
+      "type": "FLOAT"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "elong",
+      "type": "FLOAT"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "official_site",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "facebook",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "ticket",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "remind",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "staytime",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "modified",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "url",
+      "type": "STRING"
+    },
+    {
+      "fields": [
+        {
+          "mode": "NULLABLE",
+          "name": "id",
+          "type": "INTEGER"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "name",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "category",
+      "type": "RECORD"
+    },
+    {
+      "fields": [
+        {
+          "mode": "NULLABLE",
+          "name": "id",
+          "type": "INTEGER"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "name",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "target",
+      "type": "RECORD"
+    },
+    {
+      "fields": [
+        {
+          "mode": "NULLABLE",
+          "name": "id",
+          "type": "INTEGER"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "name",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "service",
+      "type": "RECORD"
+    },
+    {
+      "fields": [
+        {
+          "mode": "NULLABLE",
+          "name": "id",
+          "type": "INTEGER"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "name",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "friendly",
+      "type": "RECORD"
+    },
+    {
+      "fields": [
+        {
+          "mode": "NULLABLE",
+          "name": "src",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "subject",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "ext",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "images",
+      "type": "RECORD"
+    },
+    {
+      "fields": [
+        {
+          "mode": "NULLABLE",
+          "name": "src",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "subject",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "files",
+      "type": "RECORD"
+    },
+    {
+      "fields": [
+        {
+          "mode": "NULLABLE",
+          "name": "src",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "subject",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "links",
+      "type": "RECORD"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "import_datetime",
+      "type": "DATETIME"
+    }
+]
+  
