@@ -1,7 +1,3 @@
-{{ config(
-    materialized="table"
-) }}
-
 SELECT
   main.id,
   information.name,

@@ -1,6 +1,3 @@
-{{ config(
-    materialized="table"
-) }}
 WITH A AS(
     SELECT DISTINCT 'category' AS tag_type, flat_category.id AS tag_id, flat_category.name AS tag_name
     FROM `pennylab.penny_test.attractoins_taipei` main,

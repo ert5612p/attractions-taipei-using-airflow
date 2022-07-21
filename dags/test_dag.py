@@ -9,7 +9,6 @@ from pathlib import Path
 from google.cloud.exceptions import NotFound
 from google.oauth2 import service_account
 from airflow.decorators import dag, task
-from airflow.contrib.operators.bigquery_operator import BigQueryOperator
 
 default_args = {
     'owner': 'penny_yang',
@@ -20,9 +19,9 @@ default_args = {
     schedule_interval=None,
     start_date=pendulum.datetime(2022, 1, 1, tz="UTC"),
     catchup=False,
-    tags=['attraction'],
+    tags=['pennytest'],
 )
-def attraction_taskflow_api_etl():
+def taskflow_api_etl():
     @task()
     def extract():
         once_fetch_count = 30
@@ -95,46 +94,10 @@ def attraction_taskflow_api_etl():
             job_config=job_config,
         ).result()
 
-    # dbt_run_task = BashOperator(
-    #     task_id='dbt_run_task',
-    #     bash_command='dbt run',
-    # )
-
-    # t1 = BigQueryOperator(
-    #     task_id='attractions_information',
-    #     sql='sql_script/attractions_information.sql',
-    #     destination_dataset_table='pennylab.penny_test.attractions_information',
-    #     write_disposition='WRITE_TRUNCATE',
-    #     use_legacy_sql=False,
-    #     )
-    # t2 = BigQueryOperator(
-    #     task_id='attractions_location',
-    #     sql='sql_script/attractions_location.sql',
-    #     destination_dataset_table='pennylab.penny_test.attractions_location',
-    #     write_disposition='WRITE_TRUNCATE',
-    #     use_legacy_sql=False,
-    #     )
-
-    # t3 = BigQueryOperator(
-    #     task_id='attractions_tag_list',
-    #     sql='sql_script/attractions_tag_list.sql',
-    #     destination_dataset_table='pennylab.penny_test.attractions_tag_list',
-    #     write_disposition='WRITE_TRUNCATE',
-    #     use_legacy_sql=False,
-    #     )
-
-    # t4 = BigQueryOperator(
-    #     task_id='attractions_tag',
-    #     sql='sql_script/attractions_tag.sql',
-    #     destination_dataset_table='pennylab.penny_test.attractions_tag',
-    #     write_disposition='WRITE_TRUNCATE',
-    #     use_legacy_sql=False,
-    #     )
-
     attraction_list = extract()
     attraction_list_with_importdatetime = transform(attraction_list)
     load(attraction_list_with_importdatetime)
     # load(attraction_list_with_importdatetime) >> [t1, t2, t3, t4]
 
 
-attraction_etl_dag = attraction_taskflow_api_etl()
+attraction_etl_dag = taskflow_api_etl()

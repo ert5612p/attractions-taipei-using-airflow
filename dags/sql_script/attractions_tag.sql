@@ -1,7 +1,3 @@
-{{ config(
-    materialized="table"
-) }}
-
 WITH A AS(
     SELECT main.id, flat_category.id AS tag_id
     FROM `pennylab.penny_test.attractoins_taipei` main,

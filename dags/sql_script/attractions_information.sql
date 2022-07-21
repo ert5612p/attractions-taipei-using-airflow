@@ -1,7 +1,3 @@
-{{ config(
-    materialized="table"
-) }}
-
 WITH A AS(
     SELECT
         id,
