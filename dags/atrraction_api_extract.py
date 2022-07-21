@@ -66,10 +66,9 @@ def attraction_taskflow_api_etl():
     @task()
     def load(attraction_list: dict):
         project_id, dataset_id, table_id = 'pennylab', 'penny_test', 'attractoins_taipei'
-
         schema_path = Path(__file__).parent / "attractions_schema.json"
+
         key_path = Path(__file__).parent / "credentials.json"
-        print(key_path)
         credentials = service_account.Credentials.from_service_account_file(
             key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
         )
@@ -95,46 +94,48 @@ def attraction_taskflow_api_etl():
             job_config=job_config,
         ).result()
 
-    # dbt_run_task = BashOperator(
-    #     task_id='dbt_run_task',
-    #     bash_command='dbt run',
-    # )
+    t1 = BigQueryOperator(
+        task_id='attractions_information',
+        sql='sql_script/attractions_information.sql',
+        destination_dataset_table='pennylab.penny_test.attractions_information',
+        write_disposition='WRITE_TRUNCATE',
+        use_legacy_sql=False,
+        )
+    t2 = BigQueryOperator(
+        task_id='attractions_location',
+        sql='sql_script/attractions_location.sql',
+        destination_dataset_table='pennylab.penny_test.attractions_location',
+        write_disposition='WRITE_TRUNCATE',
+        use_legacy_sql=False,
+        )
 
-    # t1 = BigQueryOperator(
-    #     task_id='attractions_information',
-    #     sql='sql_script/attractions_information.sql',
-    #     destination_dataset_table='pennylab.penny_test.attractions_information',
-    #     write_disposition='WRITE_TRUNCATE',
-    #     use_legacy_sql=False,
-    #     )
-    # t2 = BigQueryOperator(
-    #     task_id='attractions_location',
-    #     sql='sql_script/attractions_location.sql',
-    #     destination_dataset_table='pennylab.penny_test.attractions_location',
-    #     write_disposition='WRITE_TRUNCATE',
-    #     use_legacy_sql=False,
-    #     )
+    t3 = BigQueryOperator(
+        task_id='attractions_tag_list',
+        sql='sql_script/attractions_tag_list.sql',
+        destination_dataset_table='pennylab.penny_test.attractions_tag_list',
+        write_disposition='WRITE_TRUNCATE',
+        use_legacy_sql=False,
+        )
 
-    # t3 = BigQueryOperator(
-    #     task_id='attractions_tag_list',
-    #     sql='sql_script/attractions_tag_list.sql',
-    #     destination_dataset_table='pennylab.penny_test.attractions_tag_list',
-    #     write_disposition='WRITE_TRUNCATE',
-    #     use_legacy_sql=False,
-    #     )
+    t4 = BigQueryOperator(
+        task_id='attractions_tag',
+        sql='sql_script/attractions_tag.sql',
+        destination_dataset_table='pennylab.penny_test.attractions_tag',
+        write_disposition='WRITE_TRUNCATE',
+        use_legacy_sql=False,
+        )
 
-    # t4 = BigQueryOperator(
-    #     task_id='attractions_tag',
-    #     sql='sql_script/attractions_tag.sql',
-    #     destination_dataset_table='pennylab.penny_test.attractions_tag',
-    #     write_disposition='WRITE_TRUNCATE',
-    #     use_legacy_sql=False,
-    #     )
+    dashboard = BigQueryOperator(
+        task_id='attractions_dashboard',
+        sql='sql_script/attractions_tag.sql',
+        destination_dataset_table='pennylab.penny_test.attractions_dashboard',
+        write_disposition='WRITE_TRUNCATE',
+        use_legacy_sql=False,
+        )
 
     attraction_list = extract()
     attraction_list_with_importdatetime = transform(attraction_list)
-    load(attraction_list_with_importdatetime)
-    # load(attraction_list_with_importdatetime) >> [t1, t2, t3, t4]
+    load(attraction_list_with_importdatetime) >> [t1, t2, t3, t4] >> dashboard
 
 
 attraction_etl_dag = attraction_taskflow_api_etl()
