@@ -127,7 +127,7 @@ def attraction_taskflow_api_etl():
 
     dashboard = BigQueryOperator(
         task_id='attractions_dashboard',
-        sql='sql_script/attractions_tag.sql',
+        sql='sql_script/attractions_dashboard.sql',
         destination_dataset_table='pennylab.penny_test.attractions_dashboard',
         write_disposition='WRITE_TRUNCATE',
         use_legacy_sql=False,

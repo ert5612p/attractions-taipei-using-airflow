@@ -1,4 +1,4 @@
-WITH A AS(
+WITH tag AS(
     SELECT main.id, flat_category.id AS tag_id
     FROM `pennylab.penny_test.attractoins_taipei` main,
     UNNEST(category) AS flat_category
@@ -16,4 +16,4 @@ WITH A AS(
     UNNEST(friendly) AS flat_friendly
 )
 SELECT *
-FROM A
+FROM tag
