@@ -4,8 +4,8 @@ import pendulum
 from math import inf
 from pytz import timezone, utc
 from datetime import datetime
-from google.cloud import bigquery
 from pathlib import Path
+from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
 from google.oauth2 import service_account
 from airflow.decorators import dag, task
@@ -32,7 +32,7 @@ def attraction_taskflow_api_etl():
         headers = {
             "accept": "application/json"
         }
-        attraction_list = []
+        attraction_data = []
 
         while fetch_position < total_count:
             url = url_base + str(page_param)
@@ -44,27 +44,27 @@ def attraction_taskflow_api_etl():
                 raise Exception(response.text)
             result = json.loads(response.content)
 
-            attraction_list += result["data"]
+            attraction_data += result["data"]
             fetch_position += once_fetch_count
             page_param += 1
             if total_count == inf:
                 total_count = result["total"]
 
-        if total_count != len(attraction_list):
+        if total_count != len(attraction_data):
             raise Exception("Number of attraction list is not equal to total count")
 
-        return attraction_list
+        return attraction_data
 
     @task()
-    def transform(attraction_list: dict):
+    def transform(attraction_data: dict):
         current_datetime = datetime.utcnow().replace(tzinfo=utc).astimezone(timezone('Asia/Taipei')).strftime("%Y-%m-%d %H:%M:%S")
 
-        for json_item in attraction_list:
+        for json_item in attraction_data:
             json_item.update({'import_datetime': current_datetime})
-        return attraction_list
+        return attraction_data
 
     @task()
-    def load(attraction_list: dict):
+    def load(attraction_data: dict):
         project_id, dataset_id, table_id = 'pennylab', 'penny_test', 'attractoins_taipei'
         schema_path = Path(__file__).parent / "attractions_schema.json"
 
@@ -88,28 +88,21 @@ def attraction_taskflow_api_etl():
         job_config.write_disposition = bigquery.WriteDisposition.WRITE_TRUNCATE
         job_config.schema = bq_client.schema_from_json(schema_path)
         bq_client.load_table_from_json(
-            attraction_list,
+            attraction_data,
             project=project_id,
             destination=f'{dataset_id}.{table_id}',
             job_config=job_config,
         ).result()
 
     t1 = BigQueryOperator(
-        task_id='attractions_information',
-        sql='sql_script/attractions_information.sql',
-        destination_dataset_table='pennylab.penny_test.attractions_information',
-        write_disposition='WRITE_TRUNCATE',
-        use_legacy_sql=False,
-        )
-    t2 = BigQueryOperator(
-        task_id='attractions_location',
-        sql='sql_script/attractions_location.sql',
-        destination_dataset_table='pennylab.penny_test.attractions_location',
-        write_disposition='WRITE_TRUNCATE',
-        use_legacy_sql=False,
-        )
+            task_id='attractions_information',
+            sql='sql_script/attractions_information.sql',
+            destination_dataset_table='pennylab.penny_test.attractions_information',
+            write_disposition='WRITE_TRUNCATE',
+            use_legacy_sql=False,
+            )
 
-    t3 = BigQueryOperator(
+    t2 = BigQueryOperator(
         task_id='attractions_tag_list',
         sql='sql_script/attractions_tag_list.sql',
         destination_dataset_table='pennylab.penny_test.attractions_tag_list',
@@ -117,7 +110,7 @@ def attraction_taskflow_api_etl():
         use_legacy_sql=False,
         )
 
-    t4 = BigQueryOperator(
+    t3 = BigQueryOperator(
         task_id='attractions_tag',
         sql='sql_script/attractions_tag.sql',
         destination_dataset_table='pennylab.penny_test.attractions_tag',
@@ -135,7 +128,7 @@ def attraction_taskflow_api_etl():
 
     attraction_list = extract()
     attraction_list_with_importdatetime = transform(attraction_list)
-    load(attraction_list_with_importdatetime) >> [t1, t2, t3, t4] >> dashboard
+    load(attraction_list_with_importdatetime) >> [t1, t2, t3] >> dashboard
 
 
 attraction_etl_dag = attraction_taskflow_api_etl()
