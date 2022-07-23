@@ -1,5 +1,0 @@
-credentials.json
-logs/
-dags/__pycache__/
-*.log
-*.pyc
