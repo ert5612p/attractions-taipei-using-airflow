@@ -11,4 +11,4 @@
     
 
 ## Dashboard
-- [不同地區觀光景點的機能豐富程度比較](https://datastudio.google.com/reporting/e3fb2396-6fb3-4ce7-9735-87d67f84db18)
+- [不同類型區域景點的機能豐富程度比較](https://datastudio.google.com/reporting/e3fb2396-6fb3-4ce7-9735-87d67f84db18)
