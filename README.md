@@ -4,7 +4,7 @@
 - /dags/atrraction_api_extract.py
 
 ## Data Model
-- sql_script
+- /dags/sql_script
     - attractions_information
     - attractions_tag
     - attractions_tag_list
